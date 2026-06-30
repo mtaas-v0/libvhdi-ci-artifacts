@@ -35,6 +35,8 @@ jobs:
     - name: Run tests
       run: |
         .\runtests.ps1
+    - name: List files only
+      run: Get-ChildItem -Path .\build -Recurse -File
   build_cygwin:
     runs-on: windows-latest
     strategy:
@@ -78,6 +80,8 @@ jobs:
         CHERE_INVOKING: 1
       run: |
         tests/runtests.sh -j4 VERBOSE=1
+    - name: List files in build directory
+      run: ls -la build/
   build_msys2_mingw:
     runs-on: windows-latest
     strategy:
@@ -113,3 +117,5 @@ jobs:
       shell: msys2 {0}
       run: |
         tests/runtests.sh -j4 VERBOSE=1
+    - name: List files in build directory
+      run: ls -la build/
