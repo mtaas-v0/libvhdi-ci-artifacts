@@ -35,6 +35,17 @@ jobs:
     - name: Run tests
       run: |
         .\runtests.ps1
+    # build 2nd time and upload artifact
+    - name: Build Application with MSBuild
+      run: |
+        .\build.ps1 -VisualStudioVersion ${{ matrix.visual_studio_version }} -Configuration Release -Platform x64 -PythonPath ${{ env.pythonLocation }} -VSToolsOptions "--extend-with-x64 --no-python-dll"  -ExtraMSBuildOptions  "/p:OutDir=${{ github.workspace }}\build_output\"
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: production-build-artifacts
+        path: ${{ github.workspace }}\build_output\
+        retention-days: 7
+        
     - name: List files only
       run: Get-ChildItem -Path .\ -Recurse -File
   build_cygwin:
@@ -81,7 +92,12 @@ jobs:
       run: |
         tests/runtests.sh -j4 VERBOSE=1
     - name: List files in build directory
-      run: ls -la build/
+      shell: bash --login -e -o pipefail -o igncr {0}
+      working-directory: ${{ github.workspace }}
+      env:
+        CHERE_INVOKING: 1
+      run: |
+        ls -la ./
   build_msys2_mingw:
     runs-on: windows-latest
     strategy:
@@ -118,4 +134,9 @@ jobs:
       run: |
         tests/runtests.sh -j4 VERBOSE=1
     - name: List files in build directory
-      run: ls -la build/
+      shell: bash --login -e -o pipefail -o igncr {0}
+      working-directory: ${{ github.workspace }}
+      env:
+        CHERE_INVOKING: 1
+      run: |
+        ls -la ./
