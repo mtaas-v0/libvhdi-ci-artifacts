@@ -36,7 +36,7 @@ jobs:
       run: |
         .\runtests.ps1
     - name: List files only
-      run: Get-ChildItem -Path .\build -Recurse -File
+      run: Get-ChildItem -Path .\ -Recurse -File
   build_cygwin:
     runs-on: windows-latest
     strategy:
