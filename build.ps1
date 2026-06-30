@@ -6,6 +6,7 @@ Param (
 	[string]$Configuration = ${Env:Configuration},
 	[string]$Platform = ${Env:Platform},
 	[string]$PlatformToolset = "",
+	[string]$ExtraMSBuildOptions = "",
 	[string]$PythonPath = "C:\Python314",
 	[string]$VisualStudioVersion = "",
 	[string]$VSToolsOptions = "--extend-with-x64",
@@ -217,7 +218,7 @@ If (-Not ${PlatformToolset})
 	}
 	Write-Warning "PlatformToolset not set defauting to: ${PlatformToolset}"
 }
-$MSBuildOptions = "/verbosity:quiet /target:Build /property:Configuration=${Configuration},Platform=${Platform}"
+$MSBuildOptions = "${ExtraMSBuildOptions} /verbosity:quiet /target:Build /property:Configuration=${Configuration},Platform=${Platform}"
 
 If (${PlatformToolset})
 {
